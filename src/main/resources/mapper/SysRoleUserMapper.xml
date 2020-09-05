@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fosu.edu.dao.SysRoleUserMapper">
+  <resultMap id="BaseResultMap" type="com.fosu.edu.model.SysRoleUser">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="operate_time" jdbcType="TIMESTAMP" property="operateTime" />
+    <result column="operate_ip" jdbcType="VARCHAR" property="operateIp" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, role_id, user_id, operator, operate_time, operate_ip
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.fosu.edu.model.SysRoleUserKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role_user
+    where id = #{id,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fosu.edu.model.SysRoleUserKey">
+    delete from sys_role_user
+    where id = #{id,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fosu.edu.model.SysRoleUser">
+    insert into sys_role_user (id, role_id, user_id, 
+      operator, operate_time, operate_ip
+      )
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{operator,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{operateIp,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fosu.edu.model.SysRoleUser" keyProperty = "id" useGeneratedKeys = "true">
+    insert into sys_role_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="operateTime != null">
+        operate_time,
+      </if>
+      <if test="operateIp != null">
+        operate_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateIp != null">
+        #{operateIp,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fosu.edu.model.SysRoleUser">
+    update sys_role_user
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null">
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateIp != null">
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fosu.edu.model.SysRoleUser">
+    update sys_role_user
+    set user_id = #{userId,jdbcType=INTEGER},
+      operator = #{operator,jdbcType=VARCHAR},
+      operate_time = #{operateTime,jdbcType=TIMESTAMP},
+      operate_ip = #{operateIp,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+ <select id="getRoleIdListByUserId" parameterType="map"  resultType="int">
+ 	select role_id
+ 	from sys_role_user
+ 	where user_id =#{userId}
+ </select>
+ 
+ 
+ <select id="getUserListByRoleId" parameterType="map"  resultType="int">
+ 	select role_id
+ 	from sys_role_user
+ 	where role_id=#{roleId}
+ </select>
+ 
+ 
+ <delete id= "deleteUserByRoleId" parameterType="map">
+ 	delete 
+ 	from sys_role_user
+ 	where role_id = #{roleId}
+ </delete>
+ 
+ <insert id= "batchinsert" parameterType="map">
+ 	insert into sys_role_user (role_id, user_id, 
+      operator, operate_time, operate_ip
+      )values 
+      <foreach collection="roleUserList" item="roleuser" separator=",">
+       (#{roleuser.roleId}, #{roleuser.userId}, 
+      #{roleuser.operator}, #{roleuser.operateTime}, #{roleuser.operateIp})
+      </foreach>
+ </insert>
+ 
+ <select id="getUserIdListByRoleIdList" parameterType="map" resultType="int">
+ 	select user_id
+ 	from sys_role_user
+ 	where role_id IN
+ 	<foreach collection="roleIdList" item="roleId" open="(" close=")" separator=",">
+ 	#{roleId}
+ 	</foreach>
+ 	
+ </select>
+ 
+ 
+ 
+ 
+</mapper>
